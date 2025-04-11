@@ -1,0 +1,66 @@
+{
+    "project_id": "legal-doc-summarizer-prd12-20250411124033",
+    "name": "PRD 12: Legal Document Summarizer Using LLMs",
+    "description": "Langflow configuration for summarizing legal documents, highlighting obligations/rights, and simplifying legal terms using LLMs.",
+    "components": [
+        {
+            "id": "file_loader",
+            "name": "LegalFileLoader",
+            "type": "tool",
+            "tool_type": "custom",
+            "description": "Loads PDF or DOCX and extracts text content including clauses and headings.",
+            "outputs": [
+                "document_content"
+            ]
+        },
+        {
+            "id": "summary_chain",
+            "name": "SummaryChain",
+            "type": "llm_chain",
+            "prompt": "Analyze the following legal document: {document_content}\nSummarize the key points, highlight obligations and rights, and simplify complex legal terms.",
+            "inputs": [
+                "document_content"
+            ],
+            "outputs": [
+                "summary_output"
+            ]
+        },
+        {
+            "id": "highlight_extractor",
+            "name": "HighlightExtractor",
+            "type": "llm_chain",
+            "prompt": "Highlight obligations, rights, and critical clauses from the following document:\n\n{document_content}",
+            "inputs": [
+                "document_content"
+            ],
+            "outputs": [
+                "highlights_output"
+            ]
+        },
+        {
+            "id": "glossary_generator",
+            "name": "GlossaryGenerator",
+            "type": "llm_chain",
+            "prompt": "Extract and explain all complex legal terms in simple language from the following document:\n\n{document_content}",
+            "inputs": [
+                "document_content"
+            ],
+            "outputs": [
+                "glossary_output"
+            ]
+        },
+        {
+            "id": "qa_chain",
+            "name": "DocumentQnA",
+            "type": "llm_chain",
+            "prompt": "You are a legal expert. Answer the user's question using the following document:\n\nQuestion: {user_question}\nDocument: {document_content}",
+            "inputs": [
+                "document_content",
+                "user_question"
+            ],
+            "outputs": [
+                "answer_output"
+            ]
+        }
+    ]
+}
